@@ -1,0 +1,28 @@
+﻿# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Data (jamais versionnees)
+data/raw/
+data/external/
+data/generated/
+data/bronze/
+data/silver/
+data/gold/
+*.parquet
+*.csv
+
+# Frontend
+node_modules/
+frontend/react-app/build/
+frontend/react-app/dist/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Docker
+*.log
