@@ -1,0 +1,229 @@
+=== DIMENSIONS ===
+
+dim_customer.parquet  (50,000 lignes)
+{'customer_id': String, 'customer_segment': String, 'country': String, 'city': String, 'region': String}
+shape: (2, 5)
+┌─────────────┬──────────────────┬─────────┬────────┬─────────────┐
+│ customer_id ┆ customer_segment ┆ country ┆ city   ┆ region      │
+│ ---         ┆ ---              ┆ ---     ┆ ---    ┆ ---         │
+│ str         ┆ str              ┆ str     ┆ str    ┆ str         │
+╞═════════════╪══════════════════╪═════════╪════════╪═════════════╡
+│ C-000001    ┆ Retail           ┆ Morocco ┆ Agadir ┆ Souss-Massa │
+│ C-000002    ┆ Wholesale        ┆ Morocco ┆ Agadir ┆ Souss-Massa │
+└─────────────┴──────────────────┴─────────┴────────┴─────────────┘
+
+dim_date.parquet  (1,096 lignes)
+{'date_id': Int64, 'date': Date, 'day': Int64, 'day_of_week': Int64, 'week': Int64, 'month': Int64, 'quarter': Int64, 'year': Int64, 'is_weekend': Boolean, 'is_holiday': Boolean}
+shape: (2, 10)
+┌──────────┬────────────┬─────┬─────────────┬───┬─────────┬──────┬────────────┬────────────┐
+│ date_id  ┆ date       ┆ day ┆ day_of_week ┆ … ┆ quarter ┆ year ┆ is_weekend ┆ is_holiday │
+│ ---      ┆ ---        ┆ --- ┆ ---         ┆   ┆ ---     ┆ ---  ┆ ---        ┆ ---        │
+│ i64      ┆ date       ┆ i64 ┆ i64         ┆   ┆ i64     ┆ i64  ┆ bool       ┆ bool       │
+╞══════════╪════════════╪═════╪═════════════╪═══╪═════════╪══════╪════════════╪════════════╡
+│ 20230101 ┆ 2023-01-01 ┆ 1   ┆ 7           ┆ … ┆ 1       ┆ 2023 ┆ true       ┆ true       │
+│ 20230102 ┆ 2023-01-02 ┆ 2   ┆ 1           ┆ … ┆ 1       ┆ 2023 ┆ false      ┆ false      │
+└──────────┴────────────┴─────┴─────────────┴───┴─────────┴──────┴────────────┴────────────┘
+
+dim_machine.parquet  (120 lignes)
+{'machine_id': String, 'site_id': String, 'line_id': String, 'machine_type': String, 'installation_date': Date, 'manufacturer': String, 'nominal_capacity': Float64, 'maintenance_interval': Int64}
+shape: (2, 8)
+┌────────────┬──────────┬──────────┬────────────┬────────────┬────────────┬────────────┬───────────┐
+│ machine_id ┆ site_id  ┆ line_id  ┆ machine_ty ┆ installati ┆ manufactur ┆ nominal_ca ┆ maintenan │
+│ ---        ┆ ---      ┆ ---      ┆ pe         ┆ on_date    ┆ er         ┆ pacity     ┆ ce_interv │
+│ str        ┆ str      ┆ str      ┆ ---        ┆ ---        ┆ ---        ┆ ---        ┆ al        │
+│            ┆          ┆          ┆ str        ┆ date       ┆ str        ┆ f64        ┆ ---       │
+│            ┆          ┆          ┆            ┆            ┆            ┆            ┆ i64       │
+╞════════════╪══════════╪══════════╪════════════╪════════════╪════════════╪════════════╪═══════════╡
+│ M-001      ┆ SITE_001 ┆ LINE_001 ┆ Packer     ┆ 2017-12-06 ┆ Fanuc      ┆ 76.0       ┆ 750       │
+│ M-002      ┆ SITE_001 ┆ LINE_002 ┆ Press      ┆ 2022-02-26 ┆ Fanuc      ┆ 95.0       ┆ 1000      │
+└────────────┴──────────┴──────────┴────────────┴────────────┴────────────┴────────────┴───────────┘
+
+dim_product.parquet  (5,000 lignes)
+{'product_id': String, 'product_name': String, 'category_id': String, 'subcategory_id': String, 'unit_cost': Float64, 'selling_price': Float64, 'weight': Float64, 'volume': Float64, 'safety_stock': Float64, 'reorder_point': Float64, 'lead_time_days': Int64, 'production_time_minutes': Float64}
+shape: (2, 12)
+┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
+│ product_i ┆ product_n ┆ category_ ┆ subcatego ┆ … ┆ safety_st ┆ reorder_p ┆ lead_time ┆ producti │
+│ d         ┆ ame       ┆ id        ┆ ry_id     ┆   ┆ ock       ┆ oint      ┆ _days     ┆ on_time_ │
+│ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ---       ┆ minutes  │
+│ str       ┆ str       ┆ str       ┆ str       ┆   ┆ f64       ┆ f64       ┆ i64       ┆ ---      │
+│           ┆           ┆           ┆           ┆   ┆           ┆           ┆           ┆ f64      │
+╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
+│ P-0001    ┆ Product   ┆ CAT_02    ┆ CAT_02_03 ┆ … ┆ 418.0     ┆ 2081.0    ┆ 21        ┆ 78.17    │
+│           ┆ 0001      ┆           ┆           ┆   ┆           ┆           ┆           ┆          │
+│ P-0002    ┆ Product   ┆ CAT_01    ┆ CAT_01_03 ┆ … ┆ 434.0     ┆ 1332.0    ┆ 10        ┆ 24.09    │
+│           ┆ 0002      ┆           ┆           ┆   ┆           ┆           ┆           ┆          │
+└───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
+
+dim_production_line.parquet  (25 lignes)
+{'line_id': String, 'site_id': String, 'line_name': String, 'production_type': String, 'capacity_per_hour': Float64}
+shape: (2, 5)
+┌──────────┬──────────┬───────────┬─────────────────┬───────────────────┐
+│ line_id  ┆ site_id  ┆ line_name ┆ production_type ┆ capacity_per_hour │
+│ ---      ┆ ---      ┆ ---       ┆ ---             ┆ ---               │
+│ str      ┆ str      ┆ str       ┆ str             ┆ f64               │
+╞══════════╪══════════╪═══════════╪═════════════════╪═══════════════════╡
+│ LINE_001 ┆ SITE_001 ┆ Line 01   ┆ Assembly        ┆ 273.0             │
+│ LINE_002 ┆ SITE_001 ┆ Line 02   ┆ Machining       ┆ 718.0             │
+└──────────┴──────────┴───────────┴─────────────────┴───────────────────┘
+
+dim_site.parquet  (3 lignes)
+{'site_id': String, 'site_name': String, 'country': String, 'city': String, 'latitude': Float64, 'longitude': Float64, 'production_capacity': Float64, 'warehouse_capacity': Float64}
+shape: (2, 8)
+┌──────────┬─────────────┬─────────┬────────────┬──────────┬───────────┬─────────────┬─────────────┐
+│ site_id  ┆ site_name   ┆ country ┆ city       ┆ latitude ┆ longitude ┆ production_ ┆ warehouse_c │
+│ ---      ┆ ---         ┆ ---     ┆ ---        ┆ ---      ┆ ---       ┆ capacity    ┆ apacity     │
+│ str      ┆ str         ┆ str     ┆ str        ┆ f64      ┆ f64       ┆ ---         ┆ ---         │
+│          ┆             ┆         ┆            ┆          ┆           ┆ f64         ┆ f64         │
+╞══════════╪═════════════╪═════════╪════════════╪══════════╪═══════════╪═════════════╪═════════════╡
+│ SITE_001 ┆ NEXUS       ┆ Morocco ┆ Casablanca ┆ 33.5731  ┆ -7.5898   ┆ 500000.0    ┆ 400000.0    │
+│          ┆ Casablanca  ┆         ┆            ┆          ┆           ┆             ┆             │
+│ SITE_002 ┆ NEXUS       ┆ Morocco ┆ Tanger     ┆ 35.7595  ┆ -5.834    ┆ 320000.0    ┆ 250000.0    │
+│          ┆ Tanger      ┆         ┆            ┆          ┆           ┆             ┆             │
+└──────────┴─────────────┴─────────┴────────────┴──────────┴───────────┴─────────────┴─────────────┘
+
+dim_supplier.parquet  (300 lignes)
+{'supplier_id': String, 'supplier_name': String, 'country': String, 'city': String, 'lead_time_days': Int64, 'payment_terms': String, 'reliability_score': Float64}
+shape: (2, 7)
+┌─────────────┬────────────────┬─────────┬────────┬────────────────┬───────────────┬───────────────┐
+│ supplier_id ┆ supplier_name  ┆ country ┆ city   ┆ lead_time_days ┆ payment_terms ┆ reliability_s │
+│ ---         ┆ ---            ┆ ---     ┆ ---    ┆ ---            ┆ ---           ┆ core          │
+│ str         ┆ str            ┆ str     ┆ str    ┆ i64            ┆ str           ┆ ---           │
+│             ┆                ┆         ┆        ┆                ┆               ┆ f64           │
+╞═════════════╪════════════════╪═════════╪════════╪════════════════╪═══════════════╪═══════════════╡
+│ SUP-001     ┆ Supplier 001   ┆ Morocco ┆ Tanger ┆ 4              ┆ Net 60        ┆ 100.0         │
+│             ┆ Morocco        ┆         ┆        ┆                ┆               ┆               │
+│ SUP-002     ┆ Supplier 002   ┆ Turkey  ┆ Bursa  ┆ 17             ┆ Net 30        ┆ 97.16         │
+│             ┆ Turkey         ┆         ┆        ┆                ┆               ┆               │
+└─────────────┴────────────────┴─────────┴────────┴────────────────┴───────────────┴───────────────┘
+
+dim_vehicle.parquet  (200 lignes)
+{'vehicle_id': String, 'vehicle_type': String, 'capacity_kg': Float64, 'fuel_type': String, 'consumption_per_100km': Float64, 'home_site_id': String}
+shape: (2, 6)
+┌────────────┬──────────────┬─────────────┬───────────┬───────────────────────┬──────────────┐
+│ vehicle_id ┆ vehicle_type ┆ capacity_kg ┆ fuel_type ┆ consumption_per_100km ┆ home_site_id │
+│ ---        ┆ ---          ┆ ---         ┆ ---       ┆ ---                   ┆ ---          │
+│ str        ┆ str          ┆ f64         ┆ str       ┆ f64                   ┆ str          │
+╞════════════╪══════════════╪═════════════╪═══════════╪═══════════════════════╪══════════════╡
+│ V-001      ┆ Truck        ┆ 12000.0     ┆ Diesel    ┆ 24.26                 ┆ SITE_003     │
+│ V-002      ┆ Semi-Trailer ┆ 24000.0     ┆ Gasoline  ┆ 30.48                 ┆ SITE_002     │
+└────────────┴──────────────┴─────────────┴───────────┴───────────────────────┴──────────────┘
+
+dim_warehouse.parquet  (8 lignes)
+{'warehouse_id': String, 'site_id': String, 'warehouse_type': String, 'capacity_units': Float64, 'latitude': Float64, 'longitude': Float64}
+shape: (2, 6)
+┌──────────────┬──────────┬────────────────┬────────────────┬───────────┬───────────┐
+│ warehouse_id ┆ site_id  ┆ warehouse_type ┆ capacity_units ┆ latitude  ┆ longitude │
+│ ---          ┆ ---      ┆ ---            ┆ ---            ┆ ---       ┆ ---       │
+│ str          ┆ str      ┆ str            ┆ f64            ┆ f64       ┆ f64       │
+╞══════════════╪══════════╪════════════════╪════════════════╪═══════════╪═══════════╡
+│ WH_001       ┆ SITE_001 ┆ Raw Materials  ┆ 35355.0        ┆ 33.5523   ┆ -7.574791 │
+│ WH_002       ┆ SITE_001 ┆ Finished Goods ┆ 76437.0        ┆ 33.591911 ┆ -7.628821 │
+└──────────────┴──────────┴────────────────┴────────────────┴───────────┴───────────┘
+
+=== FACTS ===
+
+fact_energy  (2,000,000 lignes)
+{'timestamp': Datetime(time_unit='us', time_zone=None), 'site_id': String, 'line_id': String, 'machine_id': String, 'energy_kwh': Float64, 'power_kw': Float64, 'temperature': Float64, 'humidity': Float64}
+shape: (2, 8)
+┌──────────────┬──────────┬──────────┬────────────┬────────────┬──────────┬─────────────┬──────────┐
+│ timestamp    ┆ site_id  ┆ line_id  ┆ machine_id ┆ energy_kwh ┆ power_kw ┆ temperature ┆ humidity │
+│ ---          ┆ ---      ┆ ---      ┆ ---        ┆ ---        ┆ ---      ┆ ---         ┆ ---      │
+│ datetime[μs] ┆ str      ┆ str      ┆ str        ┆ f64        ┆ f64      ┆ f64         ┆ f64      │
+╞══════════════╪══════════╪══════════╪════════════╪════════════╪══════════╪═════════════╪══════════╡
+│ 2023-03-01   ┆ SITE_003 ┆ LINE_021 ┆ M-071      ┆ 50.5425    ┆ 50.5425  ┆ 12.82       ┆ 67.2     │
+│ 22:33:46     ┆          ┆          ┆            ┆            ┆          ┆             ┆          │
+│ 2025-07-13   ┆ SITE_001 ┆ LINE_006 ┆ M-081      ┆ 18.0032    ┆ 18.0032  ┆ 28.37       ┆ 44.25    │
+│ 07:59:06     ┆          ┆          ┆            ┆            ┆          ┆             ┆          │
+└──────────────┴──────────┴──────────┴────────────┴────────────┴──────────┴─────────────┴──────────┘
+
+fact_inventory  (2,000,000 lignes)
+{'date_id': Int64, 'product_id': String, 'warehouse_id': String, 'opening_stock': Float64, 'inbound_quantity': Float64, 'production_quantity': Float64, 'sales_quantity': Float64, 'outbound_quantity': Float64, 'closing_stock': Float64, 'stock_value': Float64}
+shape: (2, 10)
+┌──────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+│ date_id  ┆ product_i ┆ warehouse ┆ opening_s ┆ … ┆ sales_qua ┆ outbound_ ┆ closing_s ┆ stock_val │
+│ ---      ┆ d         ┆ _id       ┆ tock      ┆   ┆ ntity     ┆ quantity  ┆ tock      ┆ ue        │
+│ i64      ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ---       ┆ ---       │
+│          ┆ str       ┆ str       ┆ f64       ┆   ┆ f64       ┆ f64       ┆ f64       ┆ f64       │
+╞══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+│ 20230113 ┆ P-0330    ┆ WH_005    ┆ 985.0     ┆ … ┆ 263.0     ┆ 142.0     ┆ 580.0     ┆ 87991.8   │
+│ 20250419 ┆ P-4558    ┆ WH_006    ┆ 1416.0    ┆ … ┆ 344.0     ┆ 13.0      ┆ 1059.0    ┆ 8111.94   │
+└──────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
+
+fact_machine_sensor  (5,000,000 lignes)
+{'timestamp': Datetime(time_unit='us', time_zone=None), 'machine_id': String, 'temperature': Float64, 'vibration': Float64, 'pressure': Float64, 'rpm': Float64, 'power': Float64, 'operating_hours': Float64}
+shape: (2, 8)
+┌──────────────┬────────────┬─────────────┬───────────┬──────────┬─────────┬────────┬──────────────┐
+│ timestamp    ┆ machine_id ┆ temperature ┆ vibration ┆ pressure ┆ rpm     ┆ power  ┆ operating_ho │
+│ ---          ┆ ---        ┆ ---         ┆ ---       ┆ ---      ┆ ---     ┆ ---    ┆ urs          │
+│ datetime[μs] ┆ str        ┆ f64         ┆ f64       ┆ f64      ┆ f64     ┆ f64    ┆ ---          │
+│              ┆            ┆             ┆           ┆          ┆         ┆        ┆ f64          │
+╞══════════════╪════════════╪═════════════╪═══════════╪══════════╪═════════╪════════╪══════════════╡
+│ 2024-08-04   ┆ M-046      ┆ 72.46       ┆ 4.117     ┆ 5.705    ┆ 1531.7  ┆ 25.701 ┆ 44930.26     │
+│ 16:28:33     ┆            ┆             ┆           ┆          ┆         ┆        ┆              │
+│ 2024-04-13   ┆ M-057      ┆ 68.828      ┆ 2.776     ┆ 6.194    ┆ 1569.63 ┆ 20.723 ┆ 20190.43     │
+│ 21:01:24     ┆            ┆             ┆           ┆          ┆         ┆        ┆              │
+└──────────────┴────────────┴─────────────┴───────────┴──────────┴─────────┴────────┴──────────────┘
+
+fact_maintenance  (1,440 lignes)
+{'machine_id': String, 'date_id': Int64, 'maintenance_type': String, 'duration_hours': Float64, 'cost': Float64, 'failure_flag': Boolean}
+shape: (2, 6)
+┌────────────┬──────────┬──────────────────┬────────────────┬─────────┬──────────────┐
+│ machine_id ┆ date_id  ┆ maintenance_type ┆ duration_hours ┆ cost    ┆ failure_flag │
+│ ---        ┆ ---      ┆ ---              ┆ ---            ┆ ---     ┆ ---          │
+│ str        ┆ i64      ┆ str              ┆ f64            ┆ f64     ┆ bool         │
+╞════════════╪══════════╪══════════════════╪════════════════╪═════════╪══════════════╡
+│ M-001      ┆ 20240304 ┆ corrective       ┆ 14.99          ┆ 2798.45 ┆ true         │
+│ M-001      ┆ 20250317 ┆ corrective       ┆ 9.23           ┆ 2290.54 ┆ true         │
+└────────────┴──────────┴──────────────────┴────────────────┴─────────┴──────────────┘
+
+fact_production  (500,000 lignes)
+{'date_id': Int64, 'site_id': String, 'line_id': String, 'machine_id': String, 'product_id': String, 'planned_quantity': Float64, 'actual_quantity': Float64, 'defect_quantity': Float64, 'production_time_minutes': Float64, 'downtime_minutes': Float64}
+shape: (2, 10)
+┌──────────┬──────────┬──────────┬────────────┬───┬────────────┬───────────┬───────────┬───────────┐
+│ date_id  ┆ site_id  ┆ line_id  ┆ machine_id ┆ … ┆ actual_qua ┆ defect_qu ┆ productio ┆ downtime_ │
+│ ---      ┆ ---      ┆ ---      ┆ ---        ┆   ┆ ntity      ┆ antity    ┆ n_time_mi ┆ minutes   │
+│ i64      ┆ str      ┆ str      ┆ str        ┆   ┆ ---        ┆ ---       ┆ nutes     ┆ ---       │
+│          ┆          ┆          ┆            ┆   ┆ f64        ┆ f64       ┆ ---       ┆ f64       │
+│          ┆          ┆          ┆            ┆   ┆            ┆           ┆ f64       ┆           │
+╞══════════╪══════════╪══════════╪════════════╪═══╪════════════╪═══════════╪═══════════╪═══════════╡
+│ 20251027 ┆ SITE_001 ┆ LINE_007 ┆ M-007      ┆ … ┆ 851.0      ┆ 15.0      ┆ 317.65    ┆ 28.28     │
+│ 20230325 ┆ SITE_001 ┆ LINE_009 ┆ M-059      ┆ … ┆ 410.0      ┆ 8.0       ┆ 366.98    ┆ 25.08     │
+└──────────┴──────────┴──────────┴────────────┴───┴────────────┴───────────┴───────────┴───────────┘
+
+fact_purchase  (200,000 lignes)
+{'date_id': Int64, 'supplier_id': String, 'product_id': String, 'order_date_id': Int64, 'expected_date_id': Int64, 'actual_date_id': Int64, 'quantity': Float64, 'unit_price': Float64, 'total_cost': Float64, 'is_delayed': Boolean, 'delay_days': Int64}
+shape: (2, 11)
+┌──────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+│ date_id  ┆ supplier_ ┆ product_i ┆ order_dat ┆ … ┆ unit_pric ┆ total_cos ┆ is_delaye ┆ delay_day │
+│ ---      ┆ id        ┆ d         ┆ e_id      ┆   ┆ e         ┆ t         ┆ d         ┆ s         │
+│ i64      ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ---       ┆ ---       │
+│          ┆ str       ┆ str       ┆ i64       ┆   ┆ f64       ┆ f64       ┆ bool      ┆ i64       │
+╞══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+│ 20240811 ┆ SUP-293   ┆ P-4034    ┆ 20240811  ┆ … ┆ 46.34     ┆ 11167.94  ┆ false     ┆ 0         │
+│ 20240414 ┆ SUP-007   ┆ P-1475    ┆ 20240414  ┆ … ┆ 19.09     ┆ 12045.79  ┆ true      ┆ 4         │
+└──────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
+
+fact_sales  (1,000,000 lignes)
+{'date_id': Int64, 'product_id': String, 'customer_id': String, 'site_id': String, 'quantity': Float64, 'unit_price': Float64, 'discount': Float64, 'revenue': Float64}
+shape: (2, 8)
+┌──────────┬────────────┬─────────────┬──────────┬──────────┬────────────┬──────────┬─────────┐
+│ date_id  ┆ product_id ┆ customer_id ┆ site_id  ┆ quantity ┆ unit_price ┆ discount ┆ revenue │
+│ ---      ┆ ---        ┆ ---         ┆ ---      ┆ ---      ┆ ---        ┆ ---      ┆ ---     │
+│ i64      ┆ str        ┆ str         ┆ str      ┆ f64      ┆ f64        ┆ f64      ┆ f64     │
+╞══════════╪════════════╪═════════════╪══════════╪══════════╪════════════╪══════════╪═════════╡
+│ 20250130 ┆ P-3256     ┆ C-040946    ┆ SITE_001 ┆ 8.0      ┆ 26.97      ┆ 0.0      ┆ 215.76  │
+│ 20240715 ┆ P-1843     ┆ C-031859    ┆ SITE_001 ┆ 2.0      ┆ 32.34      ┆ 0.0      ┆ 64.68   │
+└──────────┴────────────┴─────────────┴──────────┴──────────┴────────────┴──────────┴─────────┘
+
+fact_transport  (500,000 lignes)
+{'date_id': Int64, 'vehicle_id': String, 'warehouse_id': String, 'destination': String, 'distance_km': Float64, 'planned_duration': Float64, 'actual_duration': Float64, 'fuel_consumption': Float64, 'delivery_status': String, 'delay_minutes': Float64}
+shape: (2, 10)
+┌──────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+│ date_id  ┆ vehicle_i ┆ warehouse ┆ destinati ┆ … ┆ actual_du ┆ fuel_cons ┆ delivery_ ┆ delay_min │
+│ ---      ┆ d         ┆ _id       ┆ on        ┆   ┆ ration    ┆ umption   ┆ status    ┆ utes      │
+│ i64      ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ---       ┆ ---       │
+│          ┆ str       ┆ str       ┆ str       ┆   ┆ f64       ┆ f64       ┆ str       ┆ f64       │
+╞══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+│ 20250812 ┆ V-152     ┆ WH_008    ┆ Fes       ┆ … ┆ 665.3     ┆ 113.51    ┆ delayed   ┆ 195.0     │
+│ 20230411 ┆ V-073     ┆ WH_008    ┆ Meknes    ┆ … ┆ 569.8     ┆ 76.27     ┆ delayed   ┆ 235.2     │
+└──────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
