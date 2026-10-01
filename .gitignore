@@ -26,3 +26,5 @@ frontend/react-app/dist/
 
 # Docker
 *.log
+schemas.txt
+.pytest_cache/
