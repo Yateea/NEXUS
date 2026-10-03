@@ -429,6 +429,7 @@ def gen_transport(n, rng, ctx):
         "vehicle_id": ctx.veh_ids[vi],
         "warehouse_id": wh.astype(str),
         "destination": dest,
+        "departure_timestamp": ts,
         "distance_km": dist,
         "planned_duration": planned,
         "actual_duration": actual,
@@ -438,14 +439,15 @@ def gen_transport(n, rng, ctx):
     })
 
 
-def gen_maintenance(rng, ctx, per_machine=12):
+def gen_maintenance(rng, ctx, per_machine=10, extra_per_hot_machine=25, window_days=60):
+    # Evenements de maintenance "de base", repartis aleatoirement (toutes machines)
     mi = np.repeat(np.arange(len(ctx.mach_ids)), per_machine)
     n = len(mi)
     di = rng.integers(0, len(ctx.date_ids), n)
-    corrective = rng.random(n) < 0.18
+    corrective = rng.random(n) < 0.04
     duration = np.where(corrective, rng.uniform(4, 30, n), rng.uniform(1, 4, n))
     cost = np.where(corrective, rng.lognormal(7.6, 0.6, n), rng.lognormal(6.2, 0.4, n))
-    return pl.DataFrame({
+    base_df = pl.DataFrame({
         "machine_id": ctx.mach_ids[mi],
         "date_id": ctx.date_ids[di],
         "maintenance_type": np.where(corrective, "corrective", "preventive"),
@@ -453,6 +455,42 @@ def gen_maintenance(rng, ctx, per_machine=12):
         "cost": np.round(cost, 2),
         "failure_flag": corrective,
     })
+
+    # Evenements supplementaires pour les machines en degradation (prepare ML-03, section 11) :
+    # la probabilite de maintenance CORRECTIVE suit la vraie courbe de degradation NASA
+    # (plus la machine est degradee, plus une panne/intervention corrective est probable).
+    # Sans ce lien, un modele de maintenance predictive n'aurait aucun signal reel a apprendre.
+    hot_idx = np.where(ctx.hot)[0]
+    if len(hot_idx) == 0:
+        return base_df
+
+    extra_mi = np.repeat(hot_idx, extra_per_hot_machine)
+    m = len(extra_mi)
+    # offset biaise vers la fin de la fenetre (beta skewed) : une panne reelle survient
+    # generalement PRES de la fin de vie, pas a un moment aleatoire uniforme
+    offset = (window_days * rng.beta(3.5, 1.3, m)).astype(int)
+    offset = np.clip(offset, 0, window_days - 1)
+    extra_di = np.clip(ctx.deg_start_idx + offset, 0, len(ctx.date_ids) - 1)
+    life_fraction = np.clip(offset / window_days, 0, 1)
+    if ctx.nasa_curve_x is not None:
+        degradation = np.interp(life_fraction, ctx.nasa_curve_x, ctx.nasa_curve_y)
+    else:
+        degradation = life_fraction
+    corrective_prob = np.clip(0.15 + 0.70 * degradation, 0.05, 0.95)
+    extra_corrective = rng.random(m) < corrective_prob
+    extra_duration = np.where(extra_corrective, rng.uniform(6, 40, m), rng.uniform(1, 4, m))
+    extra_cost = np.where(extra_corrective, rng.lognormal(7.9, 0.5, m), rng.lognormal(6.2, 0.4, m))
+
+    extra_df = pl.DataFrame({
+        "machine_id": ctx.mach_ids[extra_mi],
+        "date_id": ctx.date_ids[extra_di],
+        "maintenance_type": np.where(extra_corrective, "corrective", "preventive"),
+        "duration_hours": np.round(extra_duration, 2),
+        "cost": np.round(extra_cost, 2),
+        "failure_flag": extra_corrective,
+    })
+
+    return pl.concat([base_df, extra_df])
 
 
 GENERATORS = [
@@ -500,7 +538,7 @@ def main():
         conn = connect()
         with conn.cursor() as cur:
             cur.execute("TRUNCATE fact_sales, fact_inventory, fact_purchase, fact_production, fact_energy, "
-                        "fact_maintenance, fact_transport, fact_machine_sensor RESTART IDENTITY")
+                        "fact_maintenance, fact_transport, fact_machine_sensor RESTART IDENTITY CASCADE")
         conn.commit()
 
     print("Generation des faits (scale={}) ...".format(args.scale))

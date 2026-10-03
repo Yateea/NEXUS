@@ -1,0 +1,512 @@
+[
+  {
+    "level": "PASS",
+    "name": "dim_customer.customer_id unique",
+    "detail": "50000 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_date.date_id unique",
+    "detail": "1096 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_machine.machine_id unique",
+    "detail": "120 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_product.product_id unique",
+    "detail": "5000 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_production_line.line_id unique",
+    "detail": "25 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_site.site_id unique",
+    "detail": "3 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_supplier.supplier_id unique",
+    "detail": "300 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_vehicle.vehicle_id unique",
+    "detail": "200 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_warehouse.warehouse_id unique",
+    "detail": "8 lignes, doublons=0, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_date.date_id = YYYYMMDD",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "dim_date continue (1 jour/ligne)",
+    "detail": "2023-01-01 -> 2025-12-31, trous=0"
+  },
+  {
+    "level": "PASS",
+    "name": "dim_machine.site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "dim_machine.line_id -> dim_production_line",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "dim_production_line.site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "dim_warehouse.site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "dim_vehicle.home_site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "dim_machine.site_id = site de sa ligne",
+    "detail": "ecarts=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.product_id -> dim_product",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.customer_id -> dim_customer",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.product_id -> dim_product",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.warehouse_id -> dim_warehouse",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.order_date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.expected_date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.actual_date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.supplier_id -> dim_supplier",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.product_id -> dim_product",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.line_id -> dim_production_line",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.machine_id -> dim_machine",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.product_id -> dim_product",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy.site_id -> dim_site",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy.line_id -> dim_production_line",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy.machine_id -> dim_machine",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_machine_sensor.machine_id -> dim_machine",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_maintenance.machine_id -> dim_machine",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_maintenance.date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport.date_id -> dim_date",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport.vehicle_id -> dim_vehicle",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport.warehouse_id -> dim_warehouse",
+    "detail": ""
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production: machine/ligne/site coherents avec dim_machine",
+    "detail": "lignes incoherentes=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy: machine/ligne/site coherents avec dim_machine",
+    "detail": "lignes incoherentes=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales: valeurs nulles",
+    "detail": "1,000,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.quantity<=0",
+    "detail": "0 / 1,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.unit_price<=0",
+    "detail": "0 / 1,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.discount hors [0, qty*prix] (montant)",
+    "detail": "0 / 1,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.revenue != qty*prix - discount",
+    "detail": "0 / 1,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_sales.quantity non entiere",
+    "detail": "0 / 1,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory: valeurs nulles",
+    "detail": "2,000,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.stock negatif",
+    "detail": "0 / 2,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.closing != opening+inbound+prod-sales-outbound",
+    "detail": "0 / 2,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.stock_value<0",
+    "detail": "0 / 2,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory.stock_value = closing * unit_cost (ou selling_price)",
+    "detail": "ecarts vs unit_cost=0, vs selling_price=1991934 sur 2,000,000"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_inventory: cle (date, produit, entrepot) unique",
+    "detail": "doublons=0 (a dedoublonner ou agreger en Silver)"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase: valeurs nulles",
+    "detail": "200,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.quantity<=0",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.unit_price<=0",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.total_cost != qty*prix",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.is_delayed incoherent avec delay_days",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.delay_days<0",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.delay_days != actual-expected",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.expected < order",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_purchase.actual < order",
+    "detail": "0 / 200,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production: valeurs nulles",
+    "detail": "500,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.quantites negatives",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.defect > actual",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.downtime<0 ou temps<0",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_production.temps+arret > 1440 min",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "INFO",
+    "name": "fact_production.actual > planned",
+    "detail": "77825 / 500,000 (15.565%) (normal si faible)"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_production KPIs",
+    "detail": "achievement=93.9%  defect_rate=2.01%"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy: valeurs nulles",
+    "detail": "2,000,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy.energy<0 ou power<0",
+    "detail": "0 / 2,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy.humidity hors [0,100]",
+    "detail": "0 / 2,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy.temperature hors [-10,60]",
+    "detail": "0 / 2,000,000 (0.000%) "
+  },
+  {
+    "level": "INFO",
+    "name": "fact_energy.energy_kwh == power_kw",
+    "detail": "2000000 / 2,000,000 (100.000%) (choix documente: lecture horaire, kWh = kW x 1h)"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_machine_sensor: valeurs nulles",
+    "detail": "5,000,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_machine_sensor.mesures negatives",
+    "detail": "0 / 5,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_machine_sensor.temperature hors [-20,200]",
+    "detail": "0 / 5,000,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_maintenance: valeurs nulles",
+    "detail": "1,256 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_maintenance.duration<=0",
+    "detail": "0 / 1,256 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_maintenance.cost<0",
+    "detail": "0 / 1,256 (0.000%) "
+  },
+  {
+    "level": "INFO",
+    "name": "fact_maintenance type=preventive",
+    "detail": "n=1080  failure_flag=0%"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_maintenance type=corrective",
+    "detail": "n=176  failure_flag=100%"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport: valeurs nulles",
+    "detail": "500,000 lignes, nulls=0"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport.distance/durees <= 0",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport.fuel<0",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "INFO",
+    "name": "fact_transport.delay != actual-planned",
+    "detail": "382286 / 500,000 (76.457%) (delay peut etre clippe a 0 ou en autre unite)"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport.vitesse implausible (<5 ou >130 km/h)",
+    "detail": "0 / 500,000 (0.000%) "
+  },
+  {
+    "level": "INFO",
+    "name": "fact_transport status=on_time",
+    "detail": "84.9%  delay min/avg/max = 0 / 1 / 15"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_transport status=delayed",
+    "detail": "14.7%  delay min/avg/max = 15 / 62 / 785"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_transport status=failed",
+    "detail": "0.4%  delay min/avg/max = 120 / 120 / 120"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport taux de livraisons a l'heure",
+    "detail": "84.9% (cible realiste : 75-97%)"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_energy profil genere",
+    "detail": "pic a 20h, creux a 06h"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_energy vs profil Tetouan",
+    "detail": "correlation=1.000 (pic reel 20h)"
+  },
+  {
+    "level": "PASS",
+    "name": "fact_transport: effet heure de pointe sur les retards",
+    "detail": "retards en journee (8-18h)=29.7% vs nuit=1.6%"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_transport bruit/vitesse",
+    "detail": "sigma ln(reel/prevu)=0.195 (NYC=0.497), vitesse mediane=52.3 km/h"
+  },
+  {
+    "level": "INFO",
+    "name": "fact_machine_sensor",
+    "detail": "2023-01-01 00:00:00 -> 2025-12-31 23:59:58, 120 machines"
+  },
+  {
+    "level": "PASS",
+    "name": "capteurs en derive avant les pannes corrective",
+    "detail": "vibration 3.83 (30j avant) vs 2.92 (90-180j avant) | temperature 78.9 vs 72.1"
+  }
+]

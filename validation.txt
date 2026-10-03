@@ -1,0 +1,114 @@
+
+== 1. Dimensions ==
+[PASS] dim_customer.customer_id unique  50000 lignes, doublons=0, nulls=0
+[PASS] dim_date.date_id unique  1096 lignes, doublons=0, nulls=0
+[PASS] dim_machine.machine_id unique  120 lignes, doublons=0, nulls=0
+[PASS] dim_product.product_id unique  5000 lignes, doublons=0, nulls=0
+[PASS] dim_production_line.line_id unique  25 lignes, doublons=0, nulls=0
+[PASS] dim_site.site_id unique  3 lignes, doublons=0, nulls=0
+[PASS] dim_supplier.supplier_id unique  300 lignes, doublons=0, nulls=0
+[PASS] dim_vehicle.vehicle_id unique  200 lignes, doublons=0, nulls=0
+[PASS] dim_warehouse.warehouse_id unique  8 lignes, doublons=0, nulls=0
+[PASS] dim_date.date_id = YYYYMMDD  
+[PASS] dim_date continue (1 jour/ligne)  2023-01-01 -> 2025-12-31, trous=0
+[PASS] dim_machine.site_id -> dim_site  
+[PASS] dim_machine.line_id -> dim_production_line  
+[PASS] dim_production_line.site_id -> dim_site  
+[PASS] dim_warehouse.site_id -> dim_site  
+[PASS] dim_vehicle.home_site_id -> dim_site  
+[PASS] dim_machine.site_id = site de sa ligne  ecarts=0
+
+== 2. Integrite referentielle ==
+[PASS] fact_sales.date_id -> dim_date  
+[PASS] fact_sales.product_id -> dim_product  
+[PASS] fact_sales.customer_id -> dim_customer  
+[PASS] fact_sales.site_id -> dim_site  
+[PASS] fact_inventory.date_id -> dim_date  
+[PASS] fact_inventory.product_id -> dim_product  
+[PASS] fact_inventory.warehouse_id -> dim_warehouse  
+[PASS] fact_purchase.date_id -> dim_date  
+[PASS] fact_purchase.order_date_id -> dim_date  
+[PASS] fact_purchase.expected_date_id -> dim_date  
+[PASS] fact_purchase.actual_date_id -> dim_date  
+[PASS] fact_purchase.supplier_id -> dim_supplier  
+[PASS] fact_purchase.product_id -> dim_product  
+[PASS] fact_production.date_id -> dim_date  
+[PASS] fact_production.site_id -> dim_site  
+[PASS] fact_production.line_id -> dim_production_line  
+[PASS] fact_production.machine_id -> dim_machine  
+[PASS] fact_production.product_id -> dim_product  
+[PASS] fact_energy.site_id -> dim_site  
+[PASS] fact_energy.line_id -> dim_production_line  
+[PASS] fact_energy.machine_id -> dim_machine  
+[PASS] fact_machine_sensor.machine_id -> dim_machine  
+[PASS] fact_maintenance.machine_id -> dim_machine  
+[PASS] fact_maintenance.date_id -> dim_date  
+[PASS] fact_transport.date_id -> dim_date  
+[PASS] fact_transport.vehicle_id -> dim_vehicle  
+[PASS] fact_transport.warehouse_id -> dim_warehouse  
+[PASS] fact_production: machine/ligne/site coherents avec dim_machine  lignes incoherentes=0
+[PASS] fact_energy: machine/ligne/site coherents avec dim_machine  lignes incoherentes=0
+
+== 3. Regles metier ==
+[PASS] fact_sales: valeurs nulles  1,000,000 lignes, nulls=0
+[PASS] fact_sales.quantity<=0  0 / 1,000,000 (0.000%) 
+[PASS] fact_sales.unit_price<=0  0 / 1,000,000 (0.000%) 
+[PASS] fact_sales.discount hors [0, qty*prix] (montant)  0 / 1,000,000 (0.000%) 
+[PASS] fact_sales.revenue != qty*prix - discount  0 / 1,000,000 (0.000%) 
+[PASS] fact_sales.quantity non entiere  0 / 1,000,000 (0.000%) 
+[PASS] fact_inventory: valeurs nulles  2,000,000 lignes, nulls=0
+[PASS] fact_inventory.stock negatif  0 / 2,000,000 (0.000%) 
+[PASS] fact_inventory.closing != opening+inbound+prod-sales-outbound  0 / 2,000,000 (0.000%) 
+[PASS] fact_inventory.stock_value<0  0 / 2,000,000 (0.000%) 
+[PASS] fact_inventory.stock_value = closing * unit_cost (ou selling_price)  ecarts vs unit_cost=0, vs selling_price=1991934 sur 2,000,000
+[PASS] fact_inventory: cle (date, produit, entrepot) unique  doublons=0 (a dedoublonner ou agreger en Silver)
+[PASS] fact_purchase: valeurs nulles  200,000 lignes, nulls=0
+[PASS] fact_purchase.quantity<=0  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.unit_price<=0  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.total_cost != qty*prix  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.is_delayed incoherent avec delay_days  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.delay_days<0  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.delay_days != actual-expected  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.expected < order  0 / 200,000 (0.000%) 
+[PASS] fact_purchase.actual < order  0 / 200,000 (0.000%) 
+[PASS] fact_production: valeurs nulles  500,000 lignes, nulls=0
+[PASS] fact_production.quantites negatives  0 / 500,000 (0.000%) 
+[PASS] fact_production.defect > actual  0 / 500,000 (0.000%) 
+[PASS] fact_production.downtime<0 ou temps<0  0 / 500,000 (0.000%) 
+[PASS] fact_production.temps+arret > 1440 min  0 / 500,000 (0.000%) 
+[INFO] fact_production.actual > planned  77825 / 500,000 (15.565%) (normal si faible)
+[INFO] fact_production KPIs  achievement=93.9%  defect_rate=2.01%
+[PASS] fact_energy: valeurs nulles  2,000,000 lignes, nulls=0
+[PASS] fact_energy.energy<0 ou power<0  0 / 2,000,000 (0.000%) 
+[PASS] fact_energy.humidity hors [0,100]  0 / 2,000,000 (0.000%) 
+[PASS] fact_energy.temperature hors [-10,60]  0 / 2,000,000 (0.000%) 
+[INFO] fact_energy.energy_kwh == power_kw  2000000 / 2,000,000 (100.000%) (choix documente: lecture horaire, kWh = kW x 1h)
+[PASS] fact_machine_sensor: valeurs nulles  5,000,000 lignes, nulls=0
+[PASS] fact_machine_sensor.mesures negatives  0 / 5,000,000 (0.000%) 
+[PASS] fact_machine_sensor.temperature hors [-20,200]  0 / 5,000,000 (0.000%) 
+[PASS] fact_maintenance: valeurs nulles  1,256 lignes, nulls=0
+[PASS] fact_maintenance.duration<=0  0 / 1,256 (0.000%) 
+[PASS] fact_maintenance.cost<0  0 / 1,256 (0.000%) 
+[INFO] fact_maintenance type=preventive  n=1080  failure_flag=0%
+[INFO] fact_maintenance type=corrective  n=176  failure_flag=100%
+[PASS] fact_transport: valeurs nulles  500,000 lignes, nulls=0
+[PASS] fact_transport.distance/durees <= 0  0 / 500,000 (0.000%) 
+[PASS] fact_transport.fuel<0  0 / 500,000 (0.000%) 
+[INFO] fact_transport.delay != actual-planned  382286 / 500,000 (76.457%) (delay peut etre clippe a 0 ou en autre unite)
+[PASS] fact_transport.vitesse implausible (<5 ou >130 km/h)  0 / 500,000 (0.000%) 
+[INFO] fact_transport status=on_time  84.9%  delay min/avg/max = 0 / 1 / 15
+[INFO] fact_transport status=delayed  14.7%  delay min/avg/max = 15 / 62 / 785
+[INFO] fact_transport status=failed  0.4%  delay min/avg/max = 120 / 120 / 120
+[PASS] fact_transport taux de livraisons a l'heure  84.9% (cible realiste : 75-97%)
+
+== 4. Fidelite aux patterns reels ==
+[INFO] fact_energy profil genere  pic a 20h, creux a 06h
+[PASS] fact_energy vs profil Tetouan  correlation=1.000 (pic reel 20h)
+[PASS] fact_transport: effet heure de pointe sur les retards  retards en journee (8-18h)=29.7% vs nuit=1.6%
+[INFO] fact_transport bruit/vitesse  sigma ln(reel/prevu)=0.195 (NYC=0.497), vitesse mediane=52.3 km/h
+[INFO] fact_machine_sensor  2023-01-01 00:00:00 -> 2025-12-31 23:59:58, 120 machines
+
+== 5. Signal de panne (ML-03) ==
+[PASS] capteurs en derive avant les pannes corrective  vibration 3.83 (30j avant) vs 2.92 (90-180j avant) | temperature 78.9 vs 72.1
+
+== Resume == {'PASS': 90, 'INFO': 12, 'WARN': 0, 'FAIL': 0}
