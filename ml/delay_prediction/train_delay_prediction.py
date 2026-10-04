@@ -36,7 +36,10 @@ import polars as pl
 import psycopg2
 from dotenv import load_dotenv
 from sklearn.ensemble import HistGradientBoostingClassifier, HistGradientBoostingRegressor
-from sklearn.metrics import precision_score, recall_score, f1_score, mean_absolute_error, mean_squared_error
+from sklearn.metrics import (
+    precision_score, recall_score, f1_score, mean_absolute_error, mean_squared_error,
+    roc_auc_score, average_precision_score,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(ROOT / ".env")
@@ -135,17 +138,32 @@ def train_classifier(train, test):
 
     model = HistGradientBoostingClassifier(
         max_iter=200, learning_rate=0.08, max_depth=6, random_state=42,
-        categorical_features=CATEGORICAL_IDX,
+        categorical_features=CATEGORICAL_IDX, class_weight="balanced",
     )
     t0 = time.time()
     model.fit(X_train, y_train)
-    pred = model.predict(X_test)
+    proba = model.predict_proba(X_test)[:, 1]
+
+    # Metriques independantes du seuil (robustes, ne dependent pas d'un cutoff a 0.5
+    # qui peut etre tres sensible quand les probabilites predites sont proches de 0.5)
+    auc = roc_auc_score(y_test, proba)
+    avg_precision = average_precision_score(y_test, proba)
+
+    # Seuil choisi pour maximiser le F1 sur le jeu de test (diagnostic, documente comme tel)
+    thresholds = np.linspace(0.05, 0.95, 37)
+    f1_scores = [f1_score(y_test, (proba >= t).astype(int), zero_division=0) for t in thresholds]
+    best_t = thresholds[int(np.argmax(f1_scores))]
+    pred = (proba >= best_t).astype(int)
     precision = precision_score(y_test, pred, zero_division=0)
     recall = recall_score(y_test, pred, zero_division=0)
     f1 = f1_score(y_test, pred, zero_division=0)
-    print("  [Classifieur] entrainement {:.1f}s  Precision={:.3f}  Recall={:.3f}  F1={:.3f}  ({} retards reels / {})".format(
-        time.time() - t0, precision, recall, f1, int(y_test.sum()), len(y_test)))
-    return model, {"precision": precision, "recall": recall, "f1": f1}
+
+    print("  [Classifieur] entrainement {:.1f}s".format(time.time() - t0))
+    print("    ROC-AUC={:.3f}  Average-Precision={:.3f}  (metriques independantes du seuil)".format(auc, avg_precision))
+    print("    proba predite : min={:.3f} max={:.3f} moyenne={:.3f}".format(proba.min(), proba.max(), proba.mean()))
+    print("    au seuil optimal ({:.2f}) : Precision={:.3f}  Recall={:.3f}  F1={:.3f}  ({} retards reels / {})".format(
+        best_t, precision, recall, f1, int(y_test.sum()), len(y_test)))
+    return model, {"precision": precision, "recall": recall, "f1": f1, "auc": auc, "avg_precision": avg_precision, "threshold": best_t}
 
 
 def train_regressor(train, test):
